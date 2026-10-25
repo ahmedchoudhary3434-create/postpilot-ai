@@ -3,573 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PostPilot AI Pro - Advanced Social Media Automation</title>
+    <title>PostPilot AI Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --bg-main: #090d16;
-            --bg-sidebar: #0f172a;
-            --card-bg: #111827;
-            --card-border: #1f2937;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --success: #10b981;
-            --danger: #ef4444;
-            --gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar */
-        aside {
-            width: 260px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--card-border);
-            display: flex;
-            flex-direction: column;
-            padding: 24px;
-        }
-
-        .brand {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-menu {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex-grow: 1;
-        }
-
-        .nav-item {
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: rgba(99, 102, 241, 0.1);
-            color: #818cf8;
-        }
-
-        .pro-badge-sidebar {
-            background: var(--gradient);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        /* Main Content Layout */
-        .main-wrapper {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        header {
-            height: 70px;
-            border-bottom: 1px solid var(--card-border);
-            background-color: var(--card-bg);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 32px;
-        }
-
-        header h1 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--success);
-        }
-
-        /* Views Container */
-        .view-section {
-            display: none;
-            flex-grow: 1;
-            padding: 32px;
-            overflow-y: auto;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .view-section.active {
-            display: flex;
-        }
-
-        /* Dashboard Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .stat-card h3 {
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .stat-card .value {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        /* Content Studio / Chat Layout */
-        .studio-container {
-            flex-grow: 1;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-stream {
-            flex-grow: 1;
-            padding: 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .message.user {
-            background-color: var(--accent);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        .message.ai {
-            background-color: #1f2937;
-            color: var(--text-main);
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid var(--card-border);
-        }
-
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            background-color: #1f2937;
-            padding: 12px 16px;
-            border-radius: 12px;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-style: italic;
-        }
-
-        .chat-input-box {
-            padding: 20px;
-            border-top: 1px solid var(--card-border);
-            background-color: var(--card-bg);
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .platform-select {
-            background-color: #1f2937;
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            padding: 12px;
-            border-radius: 8px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .chat-input-box input {
-            flex-grow: 1;
-            background-color: var(--bg-main);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-main);
-            font-size: 14px;
-            outline: none;
-        }
-
-        .chat-input-box input:focus {
-            border-color: var(--accent);
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
-
-        /* Analytics View */
-        .analytics-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .analytics-card h2 {
-            font-size: 16px;
-            margin-bottom: 16px;
-        }
-
-        .btn-secondary {
-            background-color: #1f2937;
-            color: var(--text-main);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 10px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background-color: #374151;
-        }
-
-        /* Accounts View */
-        .account-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .account-item {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .account-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .account-icon {
-            font-size: 24px;
-        }
-
-        /* Settings View */
-        .settings-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        body { background: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex text-slate-100">
 
-    <aside>
-        <div class="brand">
-            <span>⚡</span> PostPilot AI Pro
+    <!-- Sidebar -->
+    <aside class="w-64 glass p-6 flex flex-col justify-between border-r border-slate-800">
+        <div>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2 bg-indigo-600 rounded-lg"><i data-lucide="bot" class="w-6 h-6"></i></div>
+                <h1 class="font-bold text-xl tracking-wide">PostPilot <span class="text-indigo-400">AI</span></h1>
+            </div>
+            <nav class="space-y-2">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-slate-300 transition">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-slate-300 transition">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i> AI Studio
+                </button>
+                <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-slate-300 transition">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Analytics
+                </button>
+                <button onclick="switchTab('accounts')" id="nav-accounts" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-slate-300 transition">
+                    <i data-lucide="users" class="w-5 h-5"></i> Accounts
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 text-slate-300 transition">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Settings
+                </button>
+            </nav>
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item active" onclick="switchView('dashboard', this)">📊 Dashboard</li>
-            <li class="nav-item" onclick="switchView('studio', this)">✨ AI Content Studio</li>
-            <li class="nav-item" onclick="switchView('analytics', this)">📈 Growth & Analytics</li>
-            <li class="nav-item" onclick="switchView('accounts', this)">🔗 Social Accounts</li>
-            <li class="nav-item" onclick="switchView('settings', this)">⚙️ Pro Settings</li>
-        </ul>
-        <div class="pro-badge-sidebar">PRO TIER ACTIVE</div>
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs text-indigo-400 font-semibold uppercase">Plan Status</span>
+                <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30">Pro Tier</span>
+            </div>
+            <p class="text-xs text-slate-400">Unlimited AI Generation & Scheduling Active.</p>
+        </div>
     </aside>
 
-    <div class="main-wrapper">
-        <header>
-            <h1 id="headerTitle">Dashboard Overview</h1>
-            <div class="user-profile">
-                <div class="status-dot"></div>
-                <span>Ahmed (Pro Plan)</span>
-            </div>
-        </header>
+    <!-- Main Content Area -->
+    <main class="flex-1 p-8 overflow-y-auto">
 
-        <!-- VIEW 1: DASHBOARD -->
-        <div id="dashboard" class="view-section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Posts Created</h3>
-                    <div class="value" id="statPosts">28</div>
+        <!-- Dashboard -->
+        <section id="tab-dashboard" class="tab-content active">
+            <h2 class="text-2xl font-bold mb-6">Dashboard Overview</h2>
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="glass p-6 rounded-xl">
+                    <p class="text-slate-400 text-sm">Total Scheduled Posts</p>
+                    <h3 class="text-3xl font-bold mt-2" id="scheduled-count">12</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Engagement Growth</h3>
-                    <div class="value" style="color: var(--success);">+42.8%</div>
+                <div class="glass p-6 rounded-xl">
+                    <p class="text-slate-400 text-sm">Engagement Rate</p>
+                    <h3 class="text-3xl font-bold mt-2 text-emerald-400">4.8%</h3>
                 </div>
-                <div class="stat-card">
-                    <h3>Active Channels</h3>
-                    <div class="value" id="statChannels">3 / 4</div>
-                </div>
-                <div class="stat-card">
-                    <h3>AI Efficiency Score</h3>
-                    <div class="value">99.9%</div>
+                <div class="glass p-6 rounded-xl">
+                    <p class="text-slate-400 text-sm">AI Prompts Used</p>
+                    <h3 class="text-3xl font-bold mt-2 text-indigo-400" id="prompt-count">142</h3>
                 </div>
             </div>
-            <div class="analytics-card">
-                <h2>🚀 Quick Launch</h2>
-                <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 14px;">Jump straight into the AI Content Studio to draft posts optimized for viral growth.</p>
-                <button class="btn-primary" onclick="switchView('studio', document.querySelectorAll('.nav-item')[1])">Open AI Studio Now</button>
+            <div class="glass p-6 rounded-xl">
+                <h3 class="font-semibold text-lg mb-4">Recent Activity</h3>
+                <ul class="space-y-3 text-sm text-slate-300" id="activity-log">
+                    <li class="p-3 bg-slate-800/40 rounded-lg flex items-center justify-between">
+                        <span>Post scheduled for Twitter / X</span>
+                        <span class="text-xs text-slate-500">2 hours ago</span>
+                    </li>
+                </ul>
             </div>
-        </div>
+        </section>
 
-        <!-- VIEW 2: CONTENT STUDIO -->
-        <div id="studio" class="view-section">
-            <div class="studio-container">
-                <div class="chat-stream" id="chatStream">
-                    <div class="message ai">Hello Ahmed! I'm your PostPilot AI assistant. Select your platform below and tell me what you'd like to publish today. I'll write high-converting copy instantly!</div>
-                    <div class="typing-indicator" id="typingIndicator">PostPilot AI is generating your post...</div>
+        <!-- AI Studio -->
+        <section id="tab-studio" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">AI Content Creator</h2>
+            <div class="glass p-6 rounded-xl max-w-2xl space-y-4">
+                <div>
+                    <label class="block text-sm text-slate-400 mb-2">What do you want to post about?</label>
+                    <textarea id="ai-prompt" rows="4" class="w-full p-4 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="e.g. Write a catchy launch post for a new feature..."></textarea>
                 </div>
-                <div class="chat-input-box">
-                    <select class="platform-select" id="platformTarget">
-                        <option value="twitter">🐦 Twitter / X</option>
-                        <option value="instagram">📸 Instagram</option>
-                        <option value="linkedin">💼 LinkedIn</option>
-                        <option value="tiktok">🎵 TikTok Caption</option>
-                    </select>
-                    <input type="text" id="chatInput" placeholder="Ask AI to write a post about your latest product, idea, or update..." onkeypress="if(event.key==='Enter') sendPrompt()">
-                    <button class="btn-primary" onclick="sendPrompt()">Generate</button>
+                <button onclick="generateContent()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-lg transition flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Content
+                </button>
+                <div id="ai-output" class="hidden p-4 bg-slate-900/80 rounded-lg border border-slate-700 text-slate-200 mt-4">
+                    <p id="output-text" class="text-sm leading-relaxed"></p>
+                    <button onclick="schedulePost()" class="mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold rounded transition">
+                        Schedule Post
+                    </button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- VIEW 3: ANALYTICS -->
-        <div id="analytics" class="view-section">
-            <div class="analytics-card">
-                <h2>Performance Diagnostics</h2>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">Run a deep AI audit on your connected channels to analyze engagement metrics.</p>
-                <button class="btn-primary" onclick="runAnalysis()">Run AI Audit & Analyze</button>
-                <div id="analysisResult" style="margin-top: 20px; font-size: 14px; line-height: 1.6; color: var(--text-muted);"></div>
+        <!-- Analytics -->
+        <section id="tab-analytics" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">Performance Analytics</h2>
+            <div class="glass p-6 rounded-xl">
+                <p class="text-slate-400">Live analytics metrics and graphs connected to social platforms.</p>
             </div>
-        </div>
+        </section>
 
-        <!-- VIEW 4: ACCOUNTS -->
-        <div id="accounts" class="view-section">
-            <h2 style="font-size: 16px; margin-bottom: 8px;">Connected Social Profiles</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Manage your linked social media networks for direct posting.</p>
-            <div class="account-list">
-                <div class="account-item">
-                    <div class="account-info">
-                        <span class="account-icon">🐦</span>
-                        <div>
-                            <strong>Twitter / X</strong>
-                            <div style="font-size: 12px; color: var(--text-muted);">@AhmedPro</div>
-                        </div>
+        <!-- Accounts -->
+        <section id="tab-accounts" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">Connected Social Accounts</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass p-4 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold">Twitter / X</p>
+                        <p class="text-xs text-emerald-400">Connected (@PostPilotAI)</p>
                     </div>
-                    <button class="btn-secondary" id="btn-twitter" onclick="toggleAccount('twitter')">Disconnect</button>
+                    <button class="px-3 py-1 bg-slate-800 text-xs rounded hover:bg-slate-700">Manage</button>
                 </div>
-                <div class="account-item">
-                    <div class="account-info">
-                        <span class="account-icon">📸</span>
-                        <div>
-                            <strong>Instagram Business</strong>
-                            <div style="font-size: 12px; color: var(--text-muted);">@AhmedMedia</div>
-                        </div>
+                <div class="glass p-4 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold">LinkedIn</p>
+                        <p class="text-xs text-slate-500">Not Connected</p>
                     </div>
-                    <button class="btn-secondary" id="btn-instagram" onclick="toggleAccount('instagram')">Disconnect</button>
-                </div>
-                <div class="account-item">
-                    <div class="account-info">
-                        <span class="account-icon">💼</span>
-                        <div>
-                            <strong>LinkedIn Network</strong>
-                            <div style="font-size: 12px; color: var(--text-muted);">Ahmed Choudhary</div>
-                        </div>
-                    </div>
-                    <button class="btn-secondary" id="btn-linkedin" onclick="toggleAccount('linkedin')">Disconnect</button>
-                </div>
-                <div class="account-item">
-                    <div class="account-info">
-                        <span class="account-icon">🎵</span>
-                        <div>
-                            <strong>TikTok Creator</strong>
-                            <div style="font-size: 12px; color: var(--text-muted);">Not Connected</div>
-                        </div>
-                    </div>
-                    <button class="btn-primary" id="btn-tiktok" onclick="toggleAccount('tiktok')">Connect</button>
+                    <button class="px-3 py-1 bg-indigo-600 text-xs rounded hover:bg-indigo-500">Connect</button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- VIEW 5: SETTINGS -->
-        <div id="settings" class="view-section">
-            <div class="settings-card">
-                <h2>Subscription & License</h2>
-                <p style="font-size: 14px; color: var(--text-muted);">Current Plan: <strong style="color: var(--success);">Pro Lifetime Pass ($0.00 / Paid Edition)</strong></p>
-                <p style="font-size: 14px; color: var(--text-muted);">All features, unlimited AI generations, and advanced analytics are unlocked permanently.</p>
+        <!-- Settings -->
+        <section id="tab-settings" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">Account Settings</h2>
+            <div class="glass p-6 rounded-xl max-w-lg space-y-4">
+                <div>
+                    <label class="block text-sm text-slate-400 mb-1">Display Name</label>
+                    <input type="text" value="Pro User" class="w-full p-2 rounded bg-slate-900 border border-slate-700 text-slate-200">
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <script>
-        let postCount = 28;
+        lucide.createIcons();
 
-        function switchView(viewId, element) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-indigo-600/30', 'text-indigo-400'));
+
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('bg-indigo-600/30', 'text-indigo-400');
+        }
+
+        function generateContent() {
+            const prompt = document.getElementById('ai-prompt').value;
+            if(!prompt.trim()) return alert('Please enter a topic or prompt!');
+
+            const outputDiv = document.getElementById('ai-output');
+            const outputText = document.getElementById('output-text');
             
-            document.getElementById(viewId).classList.add('active');
-            element.classList.add('active');
+            outputText.innerText = "🚀 AI Generating: " + prompt + "\n\nKey Highlight: Supercharge your reach effortless using automated scheduling and data-driven insights!";
+            outputDiv.classList.remove('hidden');
 
-            const titles = {
-                'dashboard': 'Dashboard Overview',
-                'studio': 'AI Content Studio',
-                'analytics': 'Growth & Analytics',
-                'accounts': 'Connected Social Accounts',
-                'settings': 'Pro Settings'
-            };
-            document.getElementById('headerTitle').textContent = titles[viewId];
+            const countElem = document.getElementById('prompt-count');
+            countElem.innerText = parseInt(countElem.innerText) + 1;
         }
 
-        function sendPrompt() {
-            const input = document.getElementById('chatInput');
-            const prompt = input.value.trim();
-            const platform = document.getElementById('platformTarget').value;
-            if (!prompt) return;
+        function schedulePost() {
+            const schedElem = document.getElementById('scheduled-count');
+            schedElem.innerText = parseInt(schedElem.innerText) + 1;
 
-            const stream = document.getElementById('chatStream');
-            const indicator = document.getElementById('typingIndicator');
+            const log = document.getElementById('activity-log');
+            const li = document.createElement('li');
+            li.className = "p-3 bg-slate-800/40 rounded-lg flex items-center justify-between";
+            li.innerHTML = <span>New AI Post Scheduled</span><span class="text-xs text-slate-500">Just now</span>;
+            log.prepend(li);
 
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.textContent = [${platform.toUpperCase()}] ${prompt};
-            stream.appendChild(userMsg);
-
-            input.value = '';
-            stream.scrollTop = stream.scrollHeight;
-
-            // Show typing indicator
-            indicator.style.display = 'block';
-            stream.appendChild(indicator);
-
-            setTimeout(() => {
-                indicator.style.display = 'none';
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai';
-                aiMsg.innerHTML = <strong>Generated ${platform.toUpperCase()} Post:</strong><br><br>${getAIOutput(platform, prompt)};
-                stream.appendChild(aiMsg);
-                stream.scrollTop = stream.scrollHeight;
-
-                postCount++;
-                document.getElementById('statPosts').textContent = postCount;
-            }, 800);
-        }
-
-        function getAIOutput(platform, text) {
-            if (platform === 'twitter') {
-                return 🚀 ${text}<br><br>Don't miss out on the future of automation. Tap the link below to get started! 👇 #Tech #AI #Growth;
-            } else if (platform === 'instagram') {
-                return ✨ ${text}<br><br>Drop a comment below if you agree! Let's build the future together. 💡🔥<br><br>.#Entrepreneur #Mindset #Success #Inspiration;
-            } else if (platform === 'linkedin') {
-                return Professional Insight: ${text}<br><br>How is your team tackling this challenge? Let's discuss in the comments below. 📈💼 #Leadership #Innovation;
-            } else {
-                return 🔥 Wait until you hear about this! ${text} 🚀 Sound off in the comments! #Viral #Trending #Creator;
-            }
-        }
-
-        function runAnalysis() {
-            const resultBox = document.getElementById('analysisResult');
-            resultBox.innerHTML = "⏳ Running deep AI performance diagnostics across connected channels...";
-            setTimeout(() => {
-                resultBox.innerHTML = ✅ <strong>Audit Complete!</strong><br>• Your best performing posting time is <strong>6:00 PM EST</strong>.<br>• Engagement has increased by <strong>42.8%</strong> over the last 7 days.<br>• Recommendation: Increase video-format content on Instagram to boost reach by an estimated +25%.;
-            }, 1000);
-        }
-
-        function toggleAccount(account) {
-            const btn = document.getElementById(btn-${account});
-            if (btn.textContent === 'Disconnect') {
-                btn.textContent = 'Connect';
-                btn.className = 'btn-primary';
-            } else {
-                btn.textContent = 'Disconnect';
-                btn.className = 'btn-secondary';
-            }
+            alert('Post successfully scheduled!');
         }
     </script>
 </body>
